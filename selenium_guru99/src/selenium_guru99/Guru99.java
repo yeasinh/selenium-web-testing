@@ -1,15 +1,18 @@
 package selenium_guru99;
 
 import java.util.*;
+import java.io.IOException;
 
 import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;  
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.Action;
 
 public class Guru99 {
 
@@ -21,7 +24,7 @@ public class Guru99 {
 		
 		// maximize the window
 		driver.manage().window().maximize();
-        
+        /**/
         // launch the website
 		String baseUrl = "http://demo.guru99.com/test/newtours/";
         driver.get(baseUrl);
@@ -49,10 +52,20 @@ public class Guru99 {
         
         // sign-in using dummy email and password in text boxes
         driver.get("https://demo.guru99.com/test/login.html");
-        driver.findElement(By.id("email")).sendKeys("abcd@gmail.com");
-        driver.findElement(By.id("passwd")).sendKeys("abcdefghlkjl");
-        driver.findElement(By.id("SubmitLogin")).submit();
+        WebElement email = driver.findElement(By.id("email"));
+        WebElement password = driver.findElement(By.id("passwd"));
+        WebElement login = driver.findElement(By.id("SubmitLogin"));
+        
+        // sending values in the text box
+        email.sendKeys("abcd@gmail.com");
+        password.sendKeys("abcdefghlkjl");
+        login.submit();
         System.out.println("Log-in done!");
+        
+        // Deleting values in the text box		
+        email.clear();			
+        password.clear();			
+        System.out.println("Text Field Cleared");
         
         // use radio button
         driver.get("http://demo.guru99.com/test/ajax.html");
@@ -102,7 +115,67 @@ public class Guru99 {
         Select option = new Select(dropDownMenu);
         option.selectByVisibleText("BANGLADESH");
         
-        // driver.close();
+        // check mouse events
+        driver.get("http://demo.guru99.com/test/newtours/");
+        WebElement home = driver.findElement(By.linkText("Home"));
+        WebElement tdhome = driver.findElement(By.xpath("//html/body/div" + "/table/tbody/tr/td"
+        + "/table/tbody/tr/td" + "/table/tbody/tr/td" + "/table/tbody/tr"));
+        
+        Actions builder = new Actions(driver);
+        Action mouseOverHome = builder.moveToElement(home).build();
+        
+        String bgColor = tdhome.getCssValue("background-color");
+        System.out.println("Before hover: " + bgColor);        
+        mouseOverHome.perform();        
+        bgColor = tdhome.getCssValue("background-color");
+        System.out.println("After hover: " + bgColor);
+        
+		// perform multiple actions
+        driver.get("http://www.facebook.com/");
+        WebElement user = driver.findElement(By.id("email"));
+
+        Actions builder = new Actions(driver);
+        Action seriesOfActions = builder
+        		.moveToElement(user)
+        		.click()
+        		.keyDown(user, Keys.SHIFT)
+        		.sendKeys(user, "hello")
+        		.keyUp(user, Keys.SHIFT)
+        		.doubleClick(user)
+        		.contextClick()
+        		.build();
+        	
+        seriesOfActions.perform() ;
+        
+		// upload a file
+		driver.get("https://demo.guru99.com/test/upload/");
+        WebElement uploadElement = driver.findElement(By.id("uploadfile_0"));
+
+        // enter the file path onto the file-selection input field
+        uploadElement.sendKeys("C:\\Users\\Admin\\Desktop\\Temp.txt");
+
+        // check the "I accept the terms of service" check box
+        driver.findElement(By.id("terms")).click();
+
+        // click the "UploadFile" button
+        driver.findElement(By.name("send")).click();
+        
+        // download a file
+        driver.get("https://demo.guru99.com/test/yahoo.html");
+        WebElement download = driver.findElement(By.id("messenger-download"));
+        String sourceLocation = download.getAttribute("href");
+        String wget_command = "cmd /c C:\\Wget\\wget.exe -P D: --no-check-certificate " + sourceLocation;
+
+        try {
+        	Process exec = Runtime.getRuntime().exec(wget_command);
+            int exitVal = exec.waitFor();
+            System.out.println("Exit value: " + exitVal);
+        } 
+        catch (InterruptedException | IOException ex) {
+            System.out.println(ex.toString());
+        }
+        
+        driver.close();
 
 	}
 
