@@ -6,17 +6,18 @@ import java.io.IOException;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.JavascriptExecutor;
 
 public class Guru99 {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NoAlertPresentException, InterruptedException {
 		
 		// instantiate driver object
 		System.setProperty("webdriver.edge.driver", "D:\\Edgedriver\\msedgedriver.exe");
@@ -47,8 +48,8 @@ public class Guru99 {
         driver.get("http://jsbin.com/usidix/1");
         driver.findElement(By.cssSelector("input[value=\"Go!\"]")).click();
         String alertMessage = driver.switchTo().alert().getText();
+        System.out.println(alertMessage);
         driver.switchTo().alert().accept();
-        
         
         // sign-in using dummy email and password in text boxes
         driver.get("https://demo.guru99.com/test/login.html");
@@ -134,8 +135,8 @@ public class Guru99 {
         driver.get("http://www.facebook.com/");
         WebElement user = driver.findElement(By.id("email"));
 
-        Actions builder = new Actions(driver);
-        Action seriesOfActions = builder
+        Actions builder2 = new Actions(driver);
+        Action seriesOfActions = builder2
         		.moveToElement(user)
         		.click()
         		.keyDown(user, Keys.SHIFT)
@@ -151,13 +152,8 @@ public class Guru99 {
 		driver.get("https://demo.guru99.com/test/upload/");
         WebElement uploadElement = driver.findElement(By.id("uploadfile_0"));
 
-        // enter the file path onto the file-selection input field
         uploadElement.sendKeys("C:\\Users\\Admin\\Desktop\\Temp.txt");
-
-        // check the "I accept the terms of service" check box
         driver.findElement(By.id("terms")).click();
-
-        // click the "UploadFile" button
         driver.findElement(By.name("send")).click();
         
         // download a file
@@ -175,8 +171,68 @@ public class Guru99 {
             System.out.println(ex.toString());
         }
         
-        driver.close();
+        // handle an alert
+		driver.get("https://demo.guru99.com/test/delete_customer.php");
+        driver.findElement(By.name("cusid")).sendKeys("53920");	
+        driver.findElement(By.name("submit")).submit();
+        
+        // switch to the alert
+        Alert alert = driver.switchTo().alert();
+        String alertMessage2 = driver.switchTo().alert().getText();
+        System.out.println(alertMessage2);
+        Thread.sleep(2000);
+        alert.accept();
+        
+		// handle a pop-up window
+		driver.get("https://demo.guru99.com/popup.php");
+		driver.findElement(By.xpath("//*[contains(@href,'popup.php')]")).click();
+		
+		// store the main window
+		String mainWindow = driver.getWindowHandle();
+		// store the newly opened windows
+		Set<String> newWindows = driver.getWindowHandles();		
+        Iterator<String> items = newWindows.iterator();
+        
+        while(items.hasNext()) {		
+            
+            String childWindow = items.next();
+        	
+            if(!mainWindow.equalsIgnoreCase(childWindow)){
+            	// switch to the child window
+            	driver.switchTo().window(childWindow);
+            	driver.findElement(By.name("emailid")).sendKeys("gaurav.3n@gmail.com");
+            	driver.findElement(By.name("btnLogin")).click();
+            	// close the child window
+            	driver.close();
+            }
+        }
+        
+        // switch to the main window
+        driver.switchTo().window(mainWindow);
+        
+        // scroll a page
+        driver.get("http://demo.guru99.com/test/guru99home/");
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        
+        // scroll down at the bottom of the page
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+        
+        // scroll by 1000 pixel vertically
+        driver.navigate().refresh();
+        js.executeScript("window.scrollBy(0,1000)");
+        
+        // scroll by visibility of an element
+        driver.navigate().refresh();
+        WebElement element = driver.findElement(By.linkText("Linux"));
+        js.executeScript("arguments[0].scrollIntoView();", element);
+        
+        // scroll horizontally
+        driver.get("http://demo.guru99.com/test/guru99home/scrolling.html");
+        WebElement element2 = driver.findElement(By.linkText("VBScript"));
+        js.executeScript("arguments[0].scrollIntoView();", element2);
 
+        driver.close();
+        
 	}
 
 }
