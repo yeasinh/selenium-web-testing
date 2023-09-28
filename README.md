@@ -10,7 +10,7 @@ Before starting any project, make sure to follow the following steps:
 1. Install the Java SDK from [Oracle](https://www.oracle.com/java/technologies/downloads/).
 2. Install the Eclipse IDE from [Eclipse](https://www.eclipse.org/downloads/).
 
-For Maven projects, the following dependencies have been added from the Maven repository website:
+For Maven projects, the following dependencies have been added from the [Maven Repository](https://mvnrepository.com/):
 1. Selenium Java
 2. WebDriverManager
 3. TestNG
