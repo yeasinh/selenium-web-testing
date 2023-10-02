@@ -4,6 +4,8 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.testng.Assert;
 
@@ -37,6 +39,30 @@ public class BugRes {
 		
 		// click the log-in button
 		driver.findElement(By.id("login-button")).click();
+		
+		// choose a product, add it to the cart, and checkout
+		WebElement backpack = driver.findElement(By.className("inventory_item_name"));
+		Thread.sleep(2000);
+		backpack.click();
+		WebElement addToCart = driver.findElement(By.cssSelector("#add-to-cart-sauce-labs-backpack"));
+		Thread.sleep(2000);
+		addToCart.click();
+		WebElement cart = driver.findElement(By.xpath("//*[@id=\"shopping_cart_container\"]/a"));
+		Thread.sleep(2000);
+		cart.click();
+		WebElement checkout = driver.findElement(By.id("checkout"));
+		Thread.sleep(2000);
+		checkout.click();
+		
+		driver.findElement(By.id("first-name")).sendKeys("Prottoy");
+		driver.findElement(By.id("last-name")).sendKeys("Yeasin");
+		driver.findElement(By.id("postal-code")).sendKeys("1200");
+		Thread.sleep(2000);
+		driver.findElement(By.cssSelector("#continue")).click();
+		Thread.sleep(2000);
+		driver.findElement(By.cssSelector("#finish")).click();
+		Thread.sleep(2000);
+		driver.findElement(By.cssSelector("#back-to-products")).click();
 		
 		// wait for 3 seconds
 		Thread.sleep(3000);
