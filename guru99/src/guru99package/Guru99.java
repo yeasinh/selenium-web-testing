@@ -1,4 +1,4 @@
-package selenium_guru99;
+package guru99package;
 
 import java.util.*;
 import java.io.IOException;
@@ -103,11 +103,11 @@ public class Guru99 {
         
         // use another check box
         driver.get("https://demo.guru99.com/test/facebook.html");					
-        WebElement chkFBPersist = driver.findElement(By.id("persist_box"));
+        WebElement checkBox = driver.findElement(By.id("persist_box"));
         
         for (int i = 0; i < 2; i++) {											
-            chkFBPersist.click (); 			
-            System.out.println("Facebook Persists Checkbox Status is -  " + chkFBPersist.isSelected());							
+        	checkBox.click (); 			
+            System.out.println("Facebook Persists Checkbox Status is -  " + checkBox.isSelected());							
         }
         
         // use drop-down
