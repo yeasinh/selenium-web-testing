@@ -1,4 +1,4 @@
-package selenium_javapoint;
+package javapointpackage;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;  
@@ -79,6 +79,7 @@ public class JavaPoint {
 	    Actions act = new Actions(driver);
 	    act.dragAndDrop(from,to).build().perform();
 	    
+	    // close the browser
 	    driver.close();
 	    
 	}
