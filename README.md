@@ -3,7 +3,7 @@
 I've followed some online tutorials on Selenium.
 The scripts are written in Java and Eclipse has been used as the IDE.
 
-The BugRes project is built as a Maven project.
+The Bug Res and Swag Labs projects are built as a Maven project.
 The other projects are built as Java projects.
 
 Before starting any project, make sure to follow the following steps:
