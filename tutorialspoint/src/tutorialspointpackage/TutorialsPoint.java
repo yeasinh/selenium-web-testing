@@ -1,4 +1,4 @@
-package selenium_tutorialspoint;
+package tutorialspointpackage;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
